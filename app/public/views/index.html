@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+    crossorigin="anonymous" />
+  <link rel="stylesheet" href="../stylesheets/style.css" />
+
+  <title>Todoアプリ</title>
+</head>
+
+<body>
+  <div class="container-fluid d-flex flex-column vw-100 vh-100 m-0 p-0 position-absolute">
+    <!-- ヘッダ -->
+    <div class="header bg-dark start-0 d-flex flex-row justify-content-center align-items-center position-relative">
+      <p class="display-4 text-white font-weight-bold">ToDoApp</p>
+    </div>
+    <!-- ボディ -->
+    <div class="body d-flex flex-row vw-100 start-0">
+      <!-- サイドバー -->
+      <div class="side w-25 bg-secondary start-0 text-white position-relative">
+      </div>
+      <!-- メインコンテンツ -->
+      <div class="main w-75 start-25 position-relative d-flex flex-column">
+        <div class="task-header">
+          <p>タスク一覧</p>
+          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#search-modal">
+            絞り込み
+          </button>
+        </div>
+        <div class="task-body">
+          <ul class="list-group" id="task-list">
+            <!-- タスク一覧を表示 -->
+          </ul>
+        </div>
+        <div class="task-footer">
+          <button type="button" class="btn btn-primary w-100" data-toggle="modal" data-target="#create-modal">
+            +新規登録
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- モーダル 新規登録 -->
+  <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-labelledby="create-modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="create-modal">新規登録</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="task">タスク</label>
+              <input type="text" class="form-control" id="task" name="task" />
+            </div>
+            <div class="form-group">
+              <label for="deadline">期限</label>
+              <input type="date" class="form-control" id="deadline" name="deadline" />
+            </div>
+            <div class="form-group">
+              <label for="category">カテゴリ</label>
+              <select class="form-control" id="category" name="category">
+                <!-- jsで動的に追加 -->
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            キャンセル
+          </button>
+          <button type="button" id="create-task" data-dismiss="modal" class="btn btn-primary">
+            登録
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- モーダル 新規登録 END -->
+
+  <!-- モーダル 更新 -->
+  <div class="modal fade" id="update-modal" tabindex="-1" role="dialog" aria-labelledby="update-modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="update-modal">更新</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="update-form">
+            <div class="form-group">
+              <label for="update-task-name">タスク</label>
+              <input type="text" class="form-control" id="update-task-name" name="update-task-name" />
+            </div>
+            <div class="form-group">
+              <label for="update-deadline">期限</label>
+              <input type="date" class="form-control" id="update-deadline" name="update-deadline" />
+            </div>
+            <div class="form-group">
+              <label for="uodate-category">カテゴリ</label>
+              <select class="form-control" name="update-category" name="update-category" id="update-category">
+                <!-- jsで動的に追加 -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="update-status">ステータス</label>
+              <select class="form-control" name="update-status" id="update-status">
+                <option value="1">完了</option>
+                <option value="2">作業中</option>
+                <option value="3">未実施</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            キャンセル
+          </button>
+          <button type="button" data-dismiss="modal" class="btn btn-primary" id="update-task">
+            保存
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- モーダル 更新 END -->
+
+  <!-- モーダル 絞り込み -->
+  <div class="modal fade" id="search-modal" tabindex="-1" role="dialog" aria-labelledby="search-modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="search-modal">絞り込み</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="search-form">
+            <p>絞り込みの種類</p>
+            <div class="form-group" id="search-items">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="search-done" name="search-item[]" value="done">
+                <label class="form-check-label" for="search-done">完了したタスク</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="search-progress" name="search-item[]" value="progress">
+                <label class="form-check-label" for="search-progress">作業中のタスク</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="search-untouched" name="search-item[]" value="untouched">
+                <label class="form-check-label" for="search-untouched">未実施のタスク</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="search-life" name="search-item[]" value="life">
+                <label class="form-check-label" for="search-life">生活</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="search-study" name="search-item[]" value="study">
+                <label class="form-check-label" for="search-study">勉強</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="search-work" name="search-item[]" value="work">
+                <label class="form-check-label" for="search-work">仕事</label>
+              </div>
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="search-hobby" name="search-item[]" value="hobby">
+                <label class="form-check-label" for="search-hobby">趣味</label>
+              </div>
+            </div>
+            <p>並び替えオプション</p>
+            <div class="form-group">
+              <label for="search-opt">並び替えの基準</label>
+              <select class="form-control" name="search-opt" id="search-opt">
+                <option value="task_name">タスクの名前</option>
+                <option value="deadline">タスクの期限</option>
+                <option value="category_id">タスクのカテゴリ</option>
+                <option value="task_status">タスクのステータス</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="search-sort">並び替えの順序</label>
+              <select class="form-control" name="search-sort" id="search-sort">
+                <option value="ASC" checked>昇順</option>
+                <option value="DESC">降順</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            キャンセル
+          </button>
+          <button type="button" id="search-task" data-dismiss="modal" class="btn btn-primary">
+            絞り込む
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- モーダル 新規登録 END -->
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+
+  <script src="../javascripts/index.js"></script>
+
+
+  <script>
+
+    // タスク表示
+    $(async function () {
+
+      const date = new Date();
+      const yyyy = date.getFullYear();
+      const mm = ("0" + (date.getMonth() + 1)).slice(-2);
+      const dd = ("0" + date.getDate()).slice(-2);
+      const currrent = yyyy + '-' + mm + '-' + dd;
+
+      // 期限のデフォルトの日付を現在に設定
+      $("#deadline").val(currrent);
+      $("#update-deadline").val(currrent);
+
+      const data = await httpGet("//" + window.location.host + "/api/task-list");
+
+      const categ = data.categories.map((category) => {
+        return `<option value="${category.id}">${category.category_name}</option>`;
+      });
+
+      // カテゴリの一覧をデータベースから取得しセレクトボックスに反映させる
+      $("#category").append(categ);
+      $("#update-category").append(categ);
+
+      const list = data.tasks.map((item) => {
+        // 日付を 年月日に変換
+        const date = new Date(item.deadline);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+
+        const deadline = year + "年" + month + "月" + day + "日";
+
+        let categoryClassName = "";
+        switch (item.category_id) {
+          case 1:
+            categoryClassName = "category-orange";
+            break;
+          case 2:
+            categoryClassName = "category-green";
+            break;
+          case 3:
+            categoryClassName = "category-blue";
+            break;
+          case 4:
+            categoryClassName = "category-red";
+            break;
+          default:
+          // なにもしない
+        }
+
+        // リストを表示
+        return `
+            <li class="list-group-item ${categoryClassName}">
+              <div class="row align-items-center">
+                <div class="col-6">
+                  <div>${item.task_name}</div>
+                </div>
+                <div class="col-3">
+                  <div>${deadline}</div>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-primary" data-updateid=${item.id} data-toggle="modal" data-target="#update-modal"　id="update-button">更新</button>
+                  <button type="button" class="btn btn-danger delete"  data-id=${item.id} data-delete==${item.task_name}>削除</button>
+                </div>
+              </div>
+            </li>`;
+      });
+
+      // ul タグにリストを追加
+      $("ul#task-list").append(list);
+    });
+
+    // 絞り込みモーダル
+    $("#search-task").on("click", async function () {
+
+      $("#task-list").empty();
+      let search_items = $('#search-form input[name="search-item[]"]:checked').map(function () {
+        return $(this).val();
+      }).get();
+
+      const requestData = {
+        search_items: search_items,
+        search_opt: $("#search-opt").val(),
+        search_sort: $("#search-sort").val(),
+      };
+      const response = await httpPost(
+        "//" + window.location.host + "/api/task-search",
+        requestData
+      );
+
+      const list = response.map((item) => {
+        // 日付を 年月日に変換
+        const date = new Date(item.deadline);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+
+        const deadline = year + "年" + month + "月" + day + "日";
+
+        let categoryClassName = "";
+        switch (item.category_id) {
+          case 1:
+            categoryClassName = "category-orange";
+            break;
+          case 2:
+            categoryClassName = "category-green";
+            break;
+          case 3:
+            categoryClassName = "category-blue";
+            break;
+          case 4:
+            categoryClassName = "category-red";
+            break;
+          default:
+          // なにもしない
+        }
+
+        // リストを表示
+        return `
+            <li class="list-group-item ${categoryClassName}">
+              <div class="row align-items-center">
+                <div class="col-6">
+                  <div>${item.task_name}</div>
+                </div>
+                <div class="col-3">
+                  <div>${deadline}</div>
+                </div>
+                <div class="col-3">
+                  <button type="button" class="btn btn-primary" data-updateid=${item.id} data-toggle="modal" data-target="#update-modal"　id="update-button">更新</button>
+                  <button type="button" class="btn btn-danger delete"  data-id=${item.id} data-delete==${item.task_name}>削除</button>
+                </div>
+              </div>
+            </li>`;
+      });
+
+      // ul タグにリストを追加
+      $("ul#task-list").append(list);
+    });
+
+    // タスク登録
+    $("#create-task").on("click", async function () {
+
+      const data = {
+        taskName: $("[name=task]").val(),
+        deadline: $("[name=deadline]").val(),
+        category: $("[name=category]").val(),
+      };
+
+      const response = await httpPost(
+        "//" + window.location.host + "/api/tasks",
+        data
+      );
+      window.location.reload();
+    });
+
+    // タスク更新モーダルに更新したいタスクのIDを渡す
+    $('#update-modal').on('show.bs.modal', async function (event) {
+      const button = $(event.relatedTarget);
+      const id = button.data('updateid');
+
+      const response = await httpGet(
+        "//" + window.location.host + `/api/tasks/${id}`
+      );
+
+      // 日付を xxxx-xx-xxに変換
+      const date = new Date(response[0].deadline);
+      const year = date.getFullYear();
+      const month = ("0" + (date.getMonth() + 1)).slice(-2);
+      const day = ("0" + (date.getDate())).slice(-2);
+      const deadlineVal = `${year}-${month}-${day}`;
+
+      // 初期値をセット
+      const modal = $(this);
+      modal.find('#update-task').attr('data-updateid', id);
+      $("[#update-form input[name=update-task-name]").val(response[0].task_name);
+      $("#update-form input[name=update-deadline]").val(deadlineVal);
+      $("#update-form select[name=update-category]").val(response[0].category_id);
+      $("#update-form select[name=update-status]").val(response[0].task_status);
+
+    });
+
+    // タスク更新
+    $("#update-task").on("click", async function () {
+      const id = $(this).data("updateid");
+
+      // リクエストデータをフォームから取得
+      const requestData = {
+        taskName: $("[name=update-task-name]").val(),
+        deadline: $("[name=update-deadline]").val(),
+        category: $("[name=update-category]").val(),
+        status: $("[name=update-status]").val(),
+      };
+      const response = await httpUpdate(
+        "//" + window.location.host + `/api/tasks/${id}`,
+        requestData
+      );
+
+      window.location.reload();
+    });
+
+    // タスク削除
+    $(document).on("click", ".delete", async function () {
+      const taskName = $(this).data("delete");
+      if (confirm(`下記の内容を削除します。\n ${taskName}`)) {
+
+        const id = $(this).data("id");
+        const response = await httpDelete(
+          "//" + window.location.host + `/api/tasks/${id}`
+        );
+
+        window.location.reload();
+      }
+    });
+  </script>
+</body>
+
+</html>

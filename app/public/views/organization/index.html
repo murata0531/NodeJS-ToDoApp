@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous" />
+    <!-- <link rel="stylesheet" href="../stylesheets/style.css" /> -->
+
+    <title>管理者としてログイン中</title>
+</head>
+
+<body>
+    <div class="container-fluid d-flex flex-column vw-100 vh-100 m-0 p-0 position-absolute">
+        <!-- ヘッダ -->
+        <div class="header bg-dark start-0 d-flex flex-row justify-content-center align-items-center position-relative">
+            <p class="display-4 text-white font-weight-bold">ToDoApp</p>
+        </div>
+        <!-- ボディ -->
+        <div class="body d-flex flex-row vw-100 start-0">
+            <!-- サイドバー -->
+            <div class="side w-25 bg-secondary start-0 text-white position-relative">
+            </div>
+            <!-- メインコンテンツ -->
+            <div class="main w-75 start-25 position-relative d-flex flex-column">
+                <div class="task-header">
+                    <p>タスク一覧</p>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#search-modal">
+                        絞り込み
+                    </button>
+                </div>
+                <div class="task-body">
+                    <ul class="list-group" id="task-list">
+                        <!-- タスク一覧を表示 -->
+                    </ul>
+                </div>
+                <div class="task-footer">
+                    <button type="button" class="btn btn-primary w-100" data-toggle="modal" data-target="#create-modal">
+                        +新規登録
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- モーダル 新規登録 -->
+    <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-labelledby="create-modal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="create-modal">新規登録</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="task">タスク</label>
+                            <input type="text" class="form-control" id="task" name="task" />
+                        </div>
+                        <div class="form-group">
+                            <label for="deadline">期限</label>
+                            <input type="date" class="form-control" id="deadline" name="deadline" />
+                        </div>
+                        <div class="form-group">
+                            <label for="category">カテゴリ</label>
+                            <select class="form-control" id="category" name="category">
+                                <!-- jsで動的に追加 -->
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        キャンセル
+                    </button>
+                    <button type="button" id="create-task" data-dismiss="modal" class="btn btn-primary">
+                        登録
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- モーダル 新規登録 END -->
+
+    <!-- モーダル 更新 -->
+    <div class="modal fade" id="update-modal" tabindex="-1" role="dialog" aria-labelledby="update-modal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="update-modal">更新</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="update-form">
+                        <div class="form-group">
+                            <label for="update-task-name">タスク</label>
+                            <input type="text" class="form-control" id="update-task-name" name="update-task-name" />
+                        </div>
+                        <div class="form-group">
+                            <label for="update-deadline">期限</label>
+                            <input type="date" class="form-control" id="update-deadline" name="update-deadline" />
+                        </div>
+                        <div class="form-group">
+                            <label for="uodate-category">カテゴリ</label>
+                            <select class="form-control" name="update-category" name="update-category" id="update-category">
+                                <!-- jsで動的に追加 -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="update-status">ステータス</label>
+                            <select class="form-control" name="update-status" id="update-status">
+                                <option value="1">完了</option>
+                                <option value="2">作業中</option>
+                                <option value="3">未実施</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        キャンセル
+                    </button>
+                    <button type="button" data-dismiss="modal" class="btn btn-primary" id="update-task">
+                        保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- モーダル 更新 END -->
+
+    <!-- モーダル 絞り込み -->
+    <div class="modal fade" id="search-modal" tabindex="-1" role="dialog" aria-labelledby="search-modal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="search-modal">絞り込み</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="search-form">
+                        <p>絞り込みの種類</p>
+                        <div class="form-group" id="search-items">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="search-done" name="search-item[]" value="done">
+                                <label class="form-check-label" for="search-done">完了したタスク</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="search-progress" name="search-item[]" value="progress">
+                                <label class="form-check-label" for="search-progress">作業中のタスク</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="search-untouched" name="search-item[]" value="untouched">
+                                <label class="form-check-label" for="search-untouched">未実施のタスク</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="search-life" name="search-item[]" value="life">
+                                <label class="form-check-label" for="search-life">生活</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="search-study" name="search-item[]" value="study">
+                                <label class="form-check-label" for="search-study">勉強</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="search-work" name="search-item[]" value="work">
+                                <label class="form-check-label" for="search-work">仕事</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="search-hobby" name="search-item[]" value="hobby">
+                                <label class="form-check-label" for="search-hobby">趣味</label>
+                            </div>
+                        </div>
+                        <p>並び替えオプション</p>
+                        <div class="form-group">
+                            <label for="search-opt">並び替えの基準</label>
+                            <select class="form-control" name="search-opt" id="search-opt">
+                                <option value="task_name">タスクの名前</option>
+                                <option value="deadline">タスクの期限</option>
+                                <option value="category_id">タスクのカテゴリ</option>
+                                <option value="task_status">タスクのステータス</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="search-sort">並び替えの順序</label>
+                            <select class="form-control" name="search-sort" id="search-sort">
+                                <option value="ASC" checked>昇順</option>
+                                <option value="DESC">降順</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        キャンセル
+                    </button>
+                    <button type="button" id="search-task" data-dismiss="modal" class="btn btn-primary">
+                        絞り込む
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- モーダル 新規登録 END -->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <!-- <script src="../javascripts/index.js"></script> -->
+
+    <script>
+
+
+    </script>
+
+</body>
+
+</html>

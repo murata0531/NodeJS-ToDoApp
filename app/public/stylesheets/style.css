@@ -1,0 +1,46 @@
+.header {
+  height:10vh;
+}
+
+.body {
+  height:90vh;
+}
+
+.task-header {
+  height:150px;
+}
+
+.task-body {
+  height:calc(100% - 200px);
+  overflow:scroll;
+}
+
+.task-footer {
+  height:10px;
+}
+
+li {
+  list-style-type: none;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  padding: 10px;
+}
+
+li.category-orange {
+  border-left-color: orange;
+  border-left-width: 20px;
+}
+
+li.category-green {
+  border-left-color: green;
+  border-left-width: 20px;
+}
+
+li.category-blue {
+  border-left-color: blue;
+  border-left-width: 20px;
+}
+
+li.category-red {
+  border-left-color: red;
+  border-left-width: 20px;
+}
