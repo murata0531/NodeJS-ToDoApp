@@ -2,21 +2,20 @@ version: '3'
 
 services:
   db:
-    build: ./docker/mysql
-    volumes:
-      - db-store:/var/lib/mysql
+    build: ./docker/db
     environment:
       - MYSQL_DATABASE=${DB_NAME:-todoapp}
       - MYSQL_USER=${DB_USER:-kensyuu}
       - MYSQL_PASSWORD=${DB_PASS:-!pass123}
       - MYSQL_ROOT_PASSWORD=${DB_PASS:-secret}
       - TZ=Asia/Tokyo
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - db-store:/var/lib/mysql
     ports:
       - 3306:3306
     tty: true
-    restart: always
-    volumes:
-      - db-store:/var/lib/mysql
-  
-volumes: 
+
+volumes:
   db-store:
